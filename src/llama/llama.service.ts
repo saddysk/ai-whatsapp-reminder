@@ -4,6 +4,7 @@ import { Bedrock } from '@llamaindex/community';
 import { LLMAgent } from 'llamaindex';
 import { utcToZonedTime } from 'date-fns-tz';
 import taskDetailsTool from './function-tools';
+import { ITaskDetails } from 'src/task/interfaces/task.interface';
 
 const CONFIG = AppConfig();
 
@@ -30,7 +31,7 @@ export class LlamaService {
   async functionCall(
     taskMessage: string,
     userTimezone = 'Asia/Kolkata',
-  ): Promise<any> {
+  ): Promise<ITaskDetails> {
     const newDate = utcToZonedTime(new Date(), userTimezone);
 
     const response = await this.agent.chat({
@@ -38,8 +39,15 @@ export class LlamaService {
       Task: ${taskMessage}`,
     });
 
-    const messageContent = JSON.parse(response.message.content as string);
+    console.log(response.message);
 
-    return messageContent.parameters;
+    const content = JSON.parse(response.message.content as string).parameters;
+
+    return {
+      ...content,
+      frequency: Number(content.frequency),
+      date: content.date == 'null' ? null : content.date,
+      end: content.end == 'null' ? null : content.end,
+    };
   }
 }

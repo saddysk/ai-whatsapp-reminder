@@ -42,9 +42,9 @@ export type Database = {
           snooze_end_at?: string | null;
           snooze_start_at?: string | null;
           start_date: string;
-          status: Database['public']['Enums']['task_status'];
+          status?: Database['public']['Enums']['task_status'];
           task: string;
-          task_id: number;
+          task_id?: number;
           trigger_count: number;
           user_id: string;
         };
@@ -82,7 +82,8 @@ export type Database = {
           conversation_id: string | null;
           created_at: string | null;
           email: string;
-          full_name: string;
+          full_name: string | null;
+          gcal_token: string | null;
           id: string;
           participant_id: string | null;
           phone: string | null;
@@ -92,7 +93,8 @@ export type Database = {
           conversation_id?: string | null;
           created_at?: string | null;
           email: string;
-          full_name: string;
+          full_name?: string | null;
+          gcal_token?: string | null;
           id: string;
           participant_id?: string | null;
           phone?: string | null;
@@ -102,7 +104,8 @@ export type Database = {
           conversation_id?: string | null;
           created_at?: string | null;
           email?: string;
-          full_name?: string;
+          full_name?: string | null;
+          gcal_token?: string | null;
           id?: string;
           participant_id?: string | null;
           phone?: string | null;
