@@ -1,0 +1,27 @@
+version: '3.9'
+
+volumes:
+  redis:
+
+# Make sure public network is created prior to first deployment
+networks:
+  public:
+    external: true
+
+services:
+  redis:
+    image: bitnami/redis:latest
+    restart: unless-stopped
+    volumes:
+      - redis:/bitnami/redis/data
+    ports:
+      - '6379:6379'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+
+  quirrel:
+    image: ghcr.io/quirrel-dev/quirrel:1.14.1
+    ports:
+      - '9181:9181'
+    environment:
+      - REDIS_URL=redis://redis:6379
