@@ -7,6 +7,8 @@ import { firstValueFrom } from 'rxjs';
 import { AppConfig } from 'src/config/config';
 import { GoogleCalendarService } from 'src/google-calendar/google-calendar.service';
 import { SupabaseService } from 'src/supabase/supabase.service';
+import { GAuthDto } from './auth.dto';
+import { MessageBirdService } from 'src/message-bird/message-bird.service';
 
 const CONFIG = AppConfig();
 
@@ -19,6 +21,7 @@ export class AuthService {
     private httpService: HttpService,
     private readonly supabaseService: SupabaseService,
     private readonly googleCalendarService: GoogleCalendarService,
+    private readonly messageBirdService: MessageBirdService,
   ) {
     const callbackUrl = `${CONFIG.API_URL}/${CONFIG.GOOGLE_AUTH_CALLBACK}`;
     this.authClient = new google.auth.OAuth2(
@@ -29,10 +32,18 @@ export class AuthService {
     this.client = this.supabaseService.getClient();
   }
 
-  getAuthUrl() {
-    return this.authClient.generateAuthUrl({
+  async getAuthUrl(request: GAuthDto) {
+    const authUrl = this.authClient.generateAuthUrl({
       access_type: 'offline',
       scope: CONFIG.GOOGLE_OAUTH_SCOPES,
+    });
+
+    const { phone, conversation_id, participant_id } = request;
+
+    await this.messageBirdService.sendMessage({
+      user_phone: phone,
+      message: `Please sign in to start syncing Google Calendar - ${authUrl}`,
+      msgBirdIds: { conversation_id, participant_id },
     });
   }
 

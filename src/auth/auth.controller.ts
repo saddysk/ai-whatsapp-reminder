@@ -1,9 +1,10 @@
-import { Controller, Query, Res } from '@nestjs/common';
+import { Body, Controller, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { GetRoute } from 'libs/decorators/route.decorators';
 import { SuccessDto } from 'libs/dtos';
 import { AuthGuarOption, UseAuthGuard } from 'libs/guards/auth.guard';
+import { GAuthDto } from './auth.dto';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -12,9 +13,9 @@ export class AuthController {
 
   @GetRoute('google')
   @UseAuthGuard(AuthGuarOption.RESTRICTED)
-  getAuthUrl(@Res() res) {
-    const authUrl = this.authService.getAuthUrl();
-    res.redirect(authUrl);
+  async getAuthUrl(@Body() data: GAuthDto) {
+    await this.authService.getAuthUrl(data);
+    return new SuccessDto();
   }
 
   @GetRoute('google/callback')
