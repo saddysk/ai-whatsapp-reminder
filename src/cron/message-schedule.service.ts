@@ -27,7 +27,7 @@ export class MessageScheduleService {
       config: {
         quirrelBaseUrl: CONFIG.QUIRREL_API_URL,
         applicationBaseUrl: CONFIG.QUIRREL_BASE_URL,
-        // token: CONFIG.QUIRREL_TOKEN,
+        token: CONFIG.QUIRREL_TOKEN,
       },
     });
   }

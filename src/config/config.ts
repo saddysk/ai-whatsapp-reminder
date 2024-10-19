@@ -37,6 +37,7 @@ const env = cleanEnv(process.env, {
   QUIRREL_API_URL: str({
     default: 'http://localhost:9181',
   }),
+  QUIRREL_TOKEN: str({ default: undefined }),
 
   MESSAGE_BIRD_ENDPOINT: str({
     default:

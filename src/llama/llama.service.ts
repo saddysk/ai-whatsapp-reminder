@@ -37,9 +37,8 @@ export class LlamaService {
     const response = await this.agent.chat({
       message: `You are a WhatsApp reminder bot message extraction server. User is sending a message from WhatsApp and you're analyzing that to extract Reminder, date or dates of the reminder, frequency of the reminder and end date. try to do the time calculations practically and logically. Do not make silly mistakes, the error will cost me a million dollars. today's date is ${newDate} Give in proper JSON format.
       Task: ${taskMessage}`,
+      chatHistory: [],
     });
-
-    console.log(response.message);
 
     const content = JSON.parse(response.message.content as string).parameters;
 

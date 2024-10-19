@@ -25,3 +25,4 @@ services:
       - '9181:9181'
     environment:
       - REDIS_URL=redis://redis:6379
+      - PASSPHRASES=wappreminderbot
