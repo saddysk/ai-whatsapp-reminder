@@ -11,24 +11,28 @@ import {
 import { PostRoute, PutRoute } from 'libs/decorators/route.decorators';
 import { SuccessDto } from 'libs/dtos';
 import { TaskBySourceService } from '../services/task-by-source.service';
+import { StandardMsgBirdRequestDto } from 'libs/dtos/message-bird.dto';
 
 @ApiTags('Task')
 @Controller('api/task/source')
 export class TaskBySourceController {
   constructor(private readonly taskService: TaskBySourceService) {}
 
-  @PostRoute('', {
-    Ok: SuccessDto,
-  })
+  @PostRoute('', { Ok: SuccessDto })
   @UseAuthGuard(AuthGuarOption.RESTRICTED)
   async create(@Body() data: CreateTaskDto): Promise<SuccessDto> {
     await this.taskService.create(data);
     return new SuccessDto();
   }
 
-  @PutRoute('snooze', {
-    Ok: SuccessDto,
-  })
+  @PostRoute('all', { Ok: SuccessDto })
+  @UseAuthGuard(AuthGuarOption.RESTRICTED)
+  async getAll(@Body() data: StandardMsgBirdRequestDto): Promise<SuccessDto> {
+    await this.taskService.getAll(data);
+    return new SuccessDto();
+  }
+
+  @PutRoute('snooze', { Ok: SuccessDto })
   @UseAuthGuard(AuthGuarOption.RESTRICTED)
   async snooze(@Body() data: SnoozeByCommandTaskDto): Promise<SuccessDto> {
     await this.taskService.snooze(data);
@@ -48,9 +52,7 @@ export class TaskBySourceController {
     }
   }
 
-  @PutRoute('/cancel/id', {
-    Ok: SuccessDto,
-  })
+  @PutRoute('/cancel/id', { Ok: SuccessDto })
   @UseAuthGuard(AuthGuarOption.RESTRICTED)
   async cancelById(
     @Body() data: CancelByIdCommandTaskDto,

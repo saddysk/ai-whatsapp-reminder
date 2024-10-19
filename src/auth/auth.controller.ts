@@ -1,20 +1,20 @@
 import { Body, Controller, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
-import { GetRoute } from 'libs/decorators/route.decorators';
+import { GetRoute, PostRoute } from 'libs/decorators/route.decorators';
 import { SuccessDto } from 'libs/dtos';
 import { AuthGuarOption, UseAuthGuard } from 'libs/guards/auth.guard';
-import { GAuthDto } from './auth.dto';
+import { StandardMsgBirdRequestDto } from 'libs/dtos/message-bird.dto';
 
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @GetRoute('google')
+  @PostRoute('google')
   @UseAuthGuard(AuthGuarOption.RESTRICTED)
-  async getAuthUrl(@Body() data: GAuthDto) {
-    await this.authService.getAuthUrl(data);
+  async fetchAuthUrl(@Body() data: StandardMsgBirdRequestDto) {
+    await this.authService.fetchAuthUrl(data);
     return new SuccessDto();
   }
 

@@ -1,8 +1,8 @@
 import { StringField } from 'libs/decorators';
 
-export class GAuthDto {
+export class StandardMsgBirdRequestDto {
   @StringField()
-  phone: string;
+  user_phone: string;
 
   @StringField()
   conversation_id: string;

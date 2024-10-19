@@ -21,6 +21,7 @@ import {
 import { MessageBirdService } from 'src/message-bird/message-bird.service';
 import { utcToZonedTime } from 'date-fns-tz';
 import { LlamaService } from 'src/llama/llama.service';
+import { StandardMsgBirdRequestDto } from 'libs/dtos/message-bird.dto';
 
 @Injectable()
 export class TaskBySourceService {
@@ -63,6 +64,39 @@ export class TaskBySourceService {
       .eq('id', user.id);
 
     this.getTaskDetailsAndSchedule(user.id, taskData, user.timezone);
+  }
+
+  async getAll(request: StandardMsgBirdRequestDto) {
+    const { user_phone, conversation_id, participant_id } = request;
+
+    const { data: user, error: userError } = await this.client
+      .from('users')
+      .select('id')
+      .eq('phone', user_phone)
+      .single();
+
+    if (!user) {
+      console.error(`Failed to fetch user. [ERROR] - ${userError}`);
+      throw new BadRequestException(
+        `No valid user found for phone: ${user_phone}`,
+      );
+    }
+
+    const { data: tasks } = await this.client
+      .from('tasks')
+      .select('task')
+      .eq('user_id', user.id)
+      .eq('status', 'active');
+
+    const allActiveTask = tasks
+      .map((t, idx) => `${idx + 1}. ${t.task}`)
+      .join(', ');
+
+    await this.messageBirdService.sendMessage({
+      user_phone,
+      message: `Here is the list of all active reminders - ${allActiveTask}`,
+      msgBirdIds: { conversation_id, participant_id },
+    });
   }
 
   async snooze(data: SnoozeByCommandTaskDto) {
