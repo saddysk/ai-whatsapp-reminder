@@ -6,9 +6,10 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { HttpModule } from '@nestjs/axios';
 import { SupabaseService } from 'src/supabase/supabase.service';
+import { GoogleCalendarModule } from 'src/google-calendar/google-calendar.module';
 
 @Module({
-  imports: [PassportModule, HttpModule],
+  imports: [PassportModule, HttpModule, GoogleCalendarModule],
   controllers: [AuthController],
   providers: [RestrictedStrategy, JwtStrategy, AuthService, SupabaseService],
 })

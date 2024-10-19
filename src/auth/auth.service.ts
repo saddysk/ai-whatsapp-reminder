@@ -5,6 +5,7 @@ import { OAuth2Client } from 'google-auth-library';
 import { google } from 'googleapis';
 import { firstValueFrom } from 'rxjs';
 import { AppConfig } from 'src/config/config';
+import { GoogleCalendarService } from 'src/google-calendar/google-calendar.service';
 import { SupabaseService } from 'src/supabase/supabase.service';
 
 const CONFIG = AppConfig();
@@ -17,6 +18,7 @@ export class AuthService {
   constructor(
     private httpService: HttpService,
     private readonly supabaseService: SupabaseService,
+    private readonly googleCalendarService: GoogleCalendarService,
   ) {
     const callbackUrl = `${CONFIG.API_URL}/${CONFIG.GOOGLE_AUTH_CALLBACK}`;
     this.authClient = new google.auth.OAuth2(
@@ -57,10 +59,12 @@ export class AuthService {
       }),
     );
 
-    const { error } = await this.client
+    const { data: user, error } = await this.client
       .from('users')
       .update({ gcal_token: tokenData.access_token })
-      .eq('email', response.data.email);
+      .eq('email', response.data.email)
+      .select('id')
+      .single();
 
     if (error) {
       console.error(
@@ -71,17 +75,9 @@ export class AuthService {
       );
     }
 
-    // const events = await this.googleCalendarService.fetchCalendarEvents();
-    // if (events) {
-    //   const processedEvents = this.googleCalendarService.processEvents(events);
-    //   // Here you can decide what to do with processedEvents
-    //   // For example, you could save them to the database or return them to the client
-    //   res.json({
-    //     message: 'Calendar synced successfully',
-    //     events: processedEvents,
-    //   });
-    // } else {
-    //   res.status(400).json({ message: 'Failed to fetch calendar events' });
-    // }
+    await this.googleCalendarService.syncGoogleCalendarEvents(
+      user.id,
+      this.authClient,
+    );
   }
 }

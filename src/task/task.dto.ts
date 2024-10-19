@@ -78,7 +78,6 @@ export class TaskDto {
   }
 }
 
-// TODO: inform rushab to update this
 export class CreateTaskDto extends PickType(TaskDto, ['user_phone', 'task']) {
   @StringFieldOptional()
   conversation_id?: string;
