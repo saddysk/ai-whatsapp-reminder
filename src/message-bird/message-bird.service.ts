@@ -1,17 +1,14 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { SupabaseClient } from '@supabase/supabase-js';
 import axios, { AxiosInstance } from 'axios';
 import { AppConfig } from 'src/config/config';
-import { SupabaseService } from 'src/supabase/supabase.service';
 
 const CONFIG = AppConfig();
 
 @Injectable()
 export class MessageBirdService {
   private readonly axios: AxiosInstance;
-  private readonly client: SupabaseClient;
 
-  constructor(private readonly supabaseService: SupabaseService) {
+  constructor() {
     this.axios = axios.create({
       baseURL: `https://nest.messagebird.com/workspaces/${CONFIG.MB_WORKSPACE_ID}`,
       headers: {
@@ -19,7 +16,6 @@ export class MessageBirdService {
         'Content-Type': 'application/json',
       },
     });
-    this.client = this.supabaseService.getClient();
   }
 
   async createContact(phone: string, displayName: string) {

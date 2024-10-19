@@ -49,6 +49,17 @@ const env = cleanEnv(process.env, {
   MB_REMINDER_PROJECT_ID: str({
     default: '9555d5b9-d4f7-4767-a5cc-eb442f87cf38',
   }),
+
+  GOOGLE_CLIENT_ID: str({ default: undefined }),
+  GOOGLE_CLIENT_SECRET: str({ default: undefined }),
+  GOOGLE_AUTH_CALLBACK: str({ default: 'auth/google/callback' }),
+  GOOGLE_OAUTH_SCOPES: str({
+    default:
+      'https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/userinfo.email',
+  }),
+  GOOGLE_USERINFO_URL: str({
+    default: 'https://www.googleapis.com/oauth2/v3/userinfo',
+  }),
 });
 
 const _AppConfig = () => ({ ...env } as const);
