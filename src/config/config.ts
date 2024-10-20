@@ -41,11 +41,11 @@ const env = cleanEnv(process.env, {
 
   MESSAGE_BIRD_ENDPOINT: str({
     default:
-      'https://capture.ap-south-1.nest.messagebird.com/webhooks/cdb1946c-8868-499b-8bdb-64f429709adc/380ed79d-2904-4d06-a622-4400a4fe9975',
+      'https://capture.us-west-1.nest.messagebird.com/webhooks/ba25eea4-c3ef-495b-9422-8e2fd2222b3b/0a8769d0-7304-4c4b-88c2-5457fa848a54',
   }),
   MESSAGE_BIRD_API_KEY: str({ default: undefined }),
-  MB_WORKSPACE_ID: str({ default: 'cdb1946c-8868-499b-8bdb-64f429709adc' }),
-  MB_CHANNEL_ID: str({ default: '5820ff2d-fd15-48ac-8e1e-4ea9abe843fb' }),
+  MB_WORKSPACE_ID: str({ default: 'ba25eea4-c3ef-495b-9422-8e2fd2222b3b' }),
+  MB_CHANNEL_ID: str({ default: '40a20f4b-a4c7-40f8-a5f0-d07d454fb8f3' }),
   MB_REMINDER_PROJECT_ID: str({
     default: '9555d5b9-d4f7-4767-a5cc-eb442f87cf38',
   }),
