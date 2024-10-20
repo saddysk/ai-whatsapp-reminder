@@ -47,7 +47,7 @@ const env = cleanEnv(process.env, {
   MB_WORKSPACE_ID: str({ default: 'ba25eea4-c3ef-495b-9422-8e2fd2222b3b' }),
   MB_CHANNEL_ID: str({ default: '40a20f4b-a4c7-40f8-a5f0-d07d454fb8f3' }),
   MB_REMINDER_PROJECT_ID: str({
-    default: '9555d5b9-d4f7-4767-a5cc-eb442f87cf38',
+    default: '08b6c8e7-2866-406d-b584-ce363708e98f',
   }),
 
   GOOGLE_CLIENT_ID: str({ default: undefined }),
